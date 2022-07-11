@@ -1,0 +1,161 @@
+#!/bin/sh
+
+user="ache"
+
+sudo_grp="wheel"
+
+yay_pkgs="lf libfxt-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo"
+
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono golang nodejs npm jdk-openjdk jre-openjdk cmake python3"
+
+dotfiles_repo="https://github.com/houman-rzk/dotfiles"
+
+repos="dwm st dmenu dwmblocks"
+
+default_branch="master"
+
+install_yay() {
+    [ -d /tmp/yay ] && rm -r /tmp/yay
+    echo "Installing yay"
+    sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay >/dev/null 2>&1 && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si >/dev/null 2>&1 || echo "Failed to install yay"
+}
+
+install_git() {
+    echo "Installing git"
+    pacman -Suy --noconfirm git >/dev/null 2>&1
+}
+
+install_pacman_pkgs() {
+    for p in $pacman_pkgs ; do
+        echo "Installing '$p'"
+	    pacman -S --noconfirm "$p" >/dev/null 2>&1
+    done
+}
+
+install_aur_pkgs() {
+    for p in $yay_pkgs ; do
+        echo "Installing '$p' (AUR)"
+	    yay -Suy --noconfirm "$p" >/dev/null 2>&1
+    done
+}
+
+build_repos() {
+    for r in $repos ; do
+        [ -d "/home/$user/.local/src/$r" ] && rm -r "/home/$user/.local/src/$r"
+        echo "Cloning '$r'"
+	    sudo -u "$user" git clone "https://github.com/houman-rzk/$r" "/home/$user/.local/src/$r" >/dev/null 2>&1
+        echo "Building '$r'"
+	    sudo -u "$user" make -C /home/"$user"/.local/src/"$r" >/dev/null 2>&1 && make -C /home/"$user"/.local/src/"$r" clean install >/dev/null 2>&1
+    done
+}
+
+source_dotfiles() {
+    [ -f /tmp/profile.tmp ] && rm /tmp/profile.tmp
+    head -n -1 /home/"$user"/.config/shell/profile > /tmp/profile.tmp
+    HOME=/home/"$user"
+    . /tmp/profile.tmp >/dev/null 2>&1
+    rm /tmp/profile.tmp
+}
+
+install_dotfiles() {
+    rm -r "/home/$user"/* >/dev/null 2>&1 ; rm -r "/home/$user"/.* >/dev/null 2>&1
+    sudo -u "$user" git config --global init.defaultbranch "$default_branch"
+    echo "Fetching dotfiles..."
+    sudo -u "$user" git init /home/"$user"/ >/dev/null 2>&1 && cd /home/"$user"/ && sudo -u "$user" git remote add origin "$dotfiles_repo" >/dev/null 2>&1 && sudo -u "$user" git pull --force origin master >/dev/null 2>&1 && cd - >/dev/null 2>&1
+}
+
+create_user() {
+    echo ""
+}
+
+install_oh_my_zsh() {
+    echo "Installing oh-my-zsh..."
+
+    # Source the dotfiles
+    source_dotfiles
+
+    [ -d $ZSH ] && rm -r $ZSH
+    sudo -u "$user" ZSH="$ZSH" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended >/dev/null 2>&1
+    [ -f /home/"$user"/.zshrc ] && rm /home/"$user"/.zshrc*
+}
+
+set_backlight_rules() {
+    echo "Setting backlight rules"
+    echo "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"\nRUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
+}
+
+add_tap_to_click() {
+    [ ! -f /etc/X11/xorg.conf.d/40-libinput.conf ] && printf 'Section "InputClass"
+        Identifier "libinput touchpad catchall"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "libinput"
+        #Enable left mouse button by tapping
+    Option "Tapping" "on"
+EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
+}
+
+add_newperms() {
+    echo "Adding new permissions"
+    echo "\n%wheel ALL=(ALL) NOPASSWD:/usr/bin/shutdown,/usr/bin/shutdown -h now,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/pacman -S,/usr/bin/pacman -Syu,/usr/bin/systemctl restart NetworkManager" >> /etc/sudoers
+}
+
+final_touch() {
+    echo "Adding the final touch..."
+    sudo -u "$user" amixer sset Master unmute >/dev/null 2>&1
+    rm /bin/sh ; ln -s /bin/dash /bin/sh
+    usermod "$user" -s /bin/zsh >/dev/null 2>&1
+    [ -f /home/"$user"/.gitconfig ] && rm /home/"$user"/.gitconfig
+
+    # npm cleanup
+    npm config set cache "$XDG_CACHE_HOME/npm" --global
+    [ -d "/home/$user/.npm" ] && rm -r "/home/$user/.npm"
+
+    # Source dotfiles
+    source_dotfiles
+
+    # Creates the history file
+    [ ! -f $HISTFILE ] && sudo -u "$user" mkdir "$XDG_DATA_HOME/shell" >/dev/null 2>&1 ; sudo -u "$user" touch $HISTFILE
+
+    [ ! -d "$XDG_CACHE_HOME" ] && sudo -u "$user" mkdir "$XDG_CACHE_HOME"
+
+}
+
+# First things first
+#create_user
+
+# Install git
+install_git
+
+# We're going to need this
+install_yay
+
+# Install all the packages
+install_pacman_pkgs
+install_aur_pkgs
+
+# Fetch and install other software
+build_repos
+
+# Install the dotfiles
+install_dotfiles
+
+# Install oh-my-zsh
+install_oh_my_zsh
+
+# Sets backlight device rules
+set_backlight_rules
+
+# Removes need for password for some commands
+add_newperms
+
+# Adds tap-to-click
+add_tap_to_click
+
+# Running the last commands
+final_touch
+
+echo DONE
+
+# Logout
+kill -9 -1
