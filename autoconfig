@@ -6,7 +6,7 @@ sudo_grp="wheel"
 
 yay_pkgs="lf libfxt-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono golang nodejs npm jdk-openjdk jre-openjdk cmake python3 slock"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono golang nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 
