@@ -4,7 +4,7 @@ user="ache"
 
 sudo_grp="wheel"
 
-yay_pkgs="lf libfxt-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo"
+yay_pkgs="lf libxft-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo"
 
 pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono golang nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim mpv"
 
@@ -83,7 +83,8 @@ install_oh_my_zsh() {
 
 set_backlight_rules() {
     echo "Setting backlight rules"
-    echo "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"\nRUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
+    echo "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
+    echo "RUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" >> /etc/udev/rules.d/backlight.rules
 }
 
 add_tap_to_click() {
@@ -99,12 +100,14 @@ EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
 
 add_newperms() {
     echo "Adding new permissions"
-    echo "\n%wheel ALL=(ALL) NOPASSWD:/usr/bin/shutdown,/usr/bin/shutdown -h now,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/pacman -S,/usr/bin/pacman -Syu,/usr/bin/systemctl restart NetworkManager" >> /etc/sudoers
+    echo "\n" >> /etc/sudoers
+    echo "%wheel ALL=(ALL) NOPASSWD:/usr/bin/shutdown,/usr/bin/shutdown -h now,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/pacman -S,/usr/bin/pacman -Syu,/usr/bin/systemctl restart NetworkManager" >> /etc/sudoers
 }
 
 final_touch() {
     echo "Adding the final touch..."
     sudo -u "$user" amixer sset Master unmute >/dev/null 2>&1
+    sudo -u "$user" amixer sset 'Auto-Mute Mode' Enabled >/dev/null 2>&1
     rm /bin/sh ; ln -s /bin/dash /bin/sh
     usermod "$user" -s /bin/zsh >/dev/null 2>&1
     [ -f /home/"$user"/.gitconfig ] && rm /home/"$user"/.gitconfig
@@ -127,7 +130,7 @@ final_touch() {
 #create_user
 
 # Install git
-install_git
+#install_git
 
 # We're going to need this
 install_yay
@@ -140,24 +143,24 @@ install_aur_pkgs
 build_repos
 
 # Install the dotfiles
-install_dotfiles
+#install_dotfiles
 
 # Install oh-my-zsh
-install_oh_my_zsh
+#install_oh_my_zsh
 
 # Sets backlight device rules
-set_backlight_rules
+#set_backlight_rules
 
 # Removes need for password for some commands
-add_newperms
+#add_newperms
 
 # Adds tap-to-click
-add_tap_to_click
+#add_tap_to_click
 
 # Running the last commands
-final_touch
+#final_touch
 
 echo DONE
 
 # Logout
-kill -9 -1
+#kill -9 -1
