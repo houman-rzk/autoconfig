@@ -30,8 +30,7 @@ install_pacman_pkgs() {
 
     for p in $pacman_pkgs ; do
         echo "Installing '$p'"
-	    #pacman -S --noconfirm "$p" >/dev/null 2>&1
-	    pacman -S --noconfirm "$p"
+	    pacman -S --noconfirm "$p" >/dev/null 2>&1
     done
 }
 
@@ -40,8 +39,7 @@ install_aur_pkgs() {
 
     for p in $yay_pkgs ; do
         echo "Installing '$p' (AUR)"
-	    #yay -S --noconfirm "$p" >/dev/null 2>&1
-	    sudo -u "$user" yay -S --noconfirm "$p"
+	    sudo -u "$user" yay -S --noconfirm "$p" >/dev/null 2>&1
     done
 }
 
@@ -165,4 +163,4 @@ final_touch
 echo DONE
 
 # Logout
-#kill -9 -1
+kill -9 -1
