@@ -20,27 +20,24 @@ install_yay() {
     sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay >/dev/null 2>&1 && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si >/dev/null 2>&1 || echo "Failed to install yay"
 }
 
-install_git() {
-    echo "Installing git"
-    pacman -Suy --noconfirm git >/dev/null 2>&1
-}
-
 install_pacman_pkgs() {
     for p in $pacman_pkgs ; do
         echo "Installing '$p'"
-	    pacman -S --noconfirm "$p" >/dev/null 2>&1
+	    #pacman -Syu --noconfirm "$p" >/dev/null 2>&1
     done
+	    pacman -Syu --noconfirm "$pacman_pkgs"
 }
 
 install_aur_pkgs() {
     for p in $yay_pkgs ; do
         echo "Installing '$p' (AUR)"
-	    yay -Suy --noconfirm "$p" >/dev/null 2>&1
+	    #yay -Syu --noconfirm "$p" >/dev/null 2>&1
     done
+	    yay -Syu --noconfirm "$aur_packages"
 }
 
 build_repos() {
-    [ ! -d "/home/$user/.local/src" ] && sudo -u "$user" mkdir "/home/$user/.local/src"
+    [ ! -d "/home/$user/.local/src" ] && sudo -u "$user" mkdir -p "/home/$user/.local/src"
 
     for r in $repos ; do
         [ -d "/home/$user/.local/src/$r" ] && rm -r "/home/$user/.local/src/$r"
@@ -130,12 +127,6 @@ final_touch() {
 
 }
 
-# First things first
-#create_user
-
-# Install git
-#install_git
-
 # We're going to need this
 install_yay
 
@@ -147,22 +138,22 @@ install_aur_pkgs
 build_repos
 
 # Install the dotfiles
-#install_dotfiles
+install_dotfiles
 
 # Install oh-my-zsh
-#install_oh_my_zsh
+install_oh_my_zsh
 
 # Sets backlight device rules
-#set_backlight_rules
+set_backlight_rules
 
 # Removes need for password for some commands
-#add_newperms
+add_newperms
 
 # Adds tap-to-click
-#add_tap_to_click
+add_tap_to_click
 
 # Running the last commands
-#final_touch
+final_touch
 
 echo DONE
 
