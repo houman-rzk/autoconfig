@@ -97,7 +97,7 @@ EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
 
 add_newperms() {
     echo "Adding new permissions"
-    echo "\n" >> /etc/sudoers
+    printf "\n" >> /etc/sudoers
     echo "%wheel ALL=(ALL) NOPASSWD:/usr/bin/shutdown,/usr/bin/shutdown -h now,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/pacman -S,/usr/bin/pacman -Syu,/usr/bin/systemctl restart NetworkManager" >> /etc/sudoers
 }
 
