@@ -132,11 +132,13 @@ final_touch() {
 
 }
 
-# We're going to need this
+# Install pacman packages
+install_pacman_pkgs
+
+# Install yay
 install_yay
 
-# Install all the packages
-install_pacman_pkgs
+# Install AUR packages
 install_aur_pkgs
 
 # Fetch and install other software
