@@ -57,7 +57,7 @@ build_repos() {
 
 source_dotfiles() {
     [ -f /tmp/profile.tmp ] && rm /tmp/profile.tmp
-    head -n -1 /home/"$user"/.config/shell/profile > /tmp/profile.tmp
+    head -n -1 /home/$user/.config/shell/profile > /tmp/profile.tmp
     HOME=/home/"$user"
     . /tmp/profile.tmp >/dev/null 2>&1
     rm /tmp/profile.tmp
@@ -83,8 +83,7 @@ install_oh_my_zsh() {
 
 set_backlight_rules() {
     echo "Setting backlight rules"
-    echo "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
-    echo "RUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" >> /etc/udev/rules.d/backlight.rules
+    printf "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"\nRUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
 }
 
 add_tap_to_click() {
