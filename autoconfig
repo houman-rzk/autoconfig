@@ -4,9 +4,9 @@ user="ache"
 
 sudo_grp="wheel"
 
-yay_pkgs="lf libxft-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo"
+yay_pkgs="lf libxft-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo 7-zip"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono golang nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim mpv"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono golang nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric calibre libreoffice"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 
@@ -119,10 +119,14 @@ final_touch() {
     # Source dotfiles
     source_dotfiles
 
-    # Creates the history file
+    # Creates some files and directories
     [ ! -f $HISTFILE ] && sudo -u "$user" mkdir "$XDG_DATA_HOME/shell" >/dev/null 2>&1 ; sudo -u "$user" touch $HISTFILE
+    [ ! -d "/home/$user/Downloads" ] && sudo -u "$user" mkdir "/home/$user/Downloads"
 
     [ ! -d "$XDG_CACHE_HOME" ] && sudo -u "$user" mkdir "$XDG_CACHE_HOME"
+
+    #Sets default apps
+    sudo -u "$user" xdg-mime default org.pwmt.zathura.desktop application/pdf
 
 }
 
