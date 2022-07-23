@@ -25,18 +25,22 @@ install_pacman_pkgs() {
     pacman-key --init
     pacman-key --populate
 
+    pacman -Syu --noconfirm
+
     for p in $pacman_pkgs ; do
         echo "Installing '$p'"
-	    #pacman -Syu --noconfirm "$p" >/dev/null 2>&1
-	    pacman -Syu --noconfirm "$p"
+	    #pacman -S --noconfirm "$p" >/dev/null 2>&1
+	    pacman -S --noconfirm "$p"
     done
 }
 
 install_aur_pkgs() {
+    yay -Syu --noconfirm
+
     for p in $yay_pkgs ; do
         echo "Installing '$p' (AUR)"
-	    #yay -Syu --noconfirm "$p" >/dev/null 2>&1
-	    yay -Syu --noconfirm "$p"
+	    #yay -S --noconfirm "$p" >/dev/null 2>&1
+	    sudo -u "$user" yay -S --noconfirm "$p"
     done
 }
 
