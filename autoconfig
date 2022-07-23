@@ -24,16 +24,16 @@ install_pacman_pkgs() {
     for p in $pacman_pkgs ; do
         echo "Installing '$p'"
 	    #pacman -Syu --noconfirm "$p" >/dev/null 2>&1
+	    pacman -Syu --noconfirm "$p"
     done
-	    pacman -Syu --noconfirm "$pacman_pkgs"
 }
 
 install_aur_pkgs() {
     for p in $yay_pkgs ; do
         echo "Installing '$p' (AUR)"
 	    #yay -Syu --noconfirm "$p" >/dev/null 2>&1
+	    yay -Syu --noconfirm "$p"
     done
-	    yay -Syu --noconfirm "$aur_packages"
 }
 
 build_repos() {
@@ -61,10 +61,6 @@ install_dotfiles() {
     sudo -u "$user" git config --global init.defaultbranch "$default_branch"
     echo "Fetching dotfiles..."
     sudo -u "$user" git init /home/"$user"/ >/dev/null 2>&1 && cd /home/"$user"/ && sudo -u "$user" git remote add origin "$dotfiles_repo" >/dev/null 2>&1 && sudo -u "$user" git pull --force origin master >/dev/null 2>&1 && cd - >/dev/null 2>&1
-}
-
-create_user() {
-    echo ""
 }
 
 install_oh_my_zsh() {
