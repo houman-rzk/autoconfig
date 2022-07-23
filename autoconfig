@@ -141,11 +141,11 @@ install_yay
 # Install AUR packages
 install_aur_pkgs
 
-# Fetch and install other software
-build_repos
-
 # Install the dotfiles
 install_dotfiles
+
+# Fetch and install other software
+build_repos
 
 # Install oh-my-zsh
 install_oh_my_zsh
