@@ -17,7 +17,8 @@ default_branch="master"
 install_yay() {
     [ -d /tmp/yay ] && rm -r /tmp/yay
     echo "Installing yay"
-    sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay >/dev/null 2>&1 && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si >/dev/null 2>&1 || echo "Failed to install yay"
+    #sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay >/dev/null 2>&1 && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si >/dev/null 2>&1 || echo "Failed to install yay"
+    sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si
 }
 
 install_pacman_pkgs() {
