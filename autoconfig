@@ -6,7 +6,7 @@ sudo_grp="wheel"
 
 yay_pkgs="lf libxft-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo 7-zip"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono golang nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric calibre libreoffice"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric calibre libreoffice"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 
@@ -21,6 +21,10 @@ install_yay() {
 }
 
 install_pacman_pkgs() {
+    rm -rf /etc/pacman.d/gnupg
+    pacman-key --init
+    pacman-key --populate
+
     for p in $pacman_pkgs ; do
         echo "Installing '$p'"
 	    #pacman -Syu --noconfirm "$p" >/dev/null 2>&1
