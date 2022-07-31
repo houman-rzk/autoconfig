@@ -6,7 +6,7 @@ sudo_grp="wheel"
 
 yay_pkgs="lf libxft-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo 7-zip"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions bc xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpeg ffprobe ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice xarchiver unclutter wget fzf jq wget youtube-dl otf-ipafont noto-fonts noto-fonts-cjk urlscan ufw neomutt calibre w3m"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 
@@ -17,8 +17,8 @@ default_branch="master"
 install_yay() {
     [ -d /tmp/yay ] && rm -r /tmp/yay
     echo "Installing yay"
-    #sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay >/dev/null 2>&1 && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si >/dev/null 2>&1 || echo "Failed to install yay"
-    sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si
+    { sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay >/dev/null 2>&1 && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si >/dev/null 2>&1 ;} || echo "Failed to install yay"
+    #sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si
 }
 
 install_pacman_pkgs() {
@@ -67,7 +67,7 @@ install_dotfiles() {
     rm -r "/home/$user"/* >/dev/null 2>&1 ; rm -r "/home/$user"/.* >/dev/null 2>&1
     sudo -u "$user" git config --global init.defaultbranch "$default_branch"
     echo "Fetching dotfiles..."
-    sudo -u "$user" git init /home/"$user"/ >/dev/null 2>&1 && cd /home/"$user"/ && sudo -u "$user" git remote add origin "$dotfiles_repo" >/dev/null 2>&1 && sudo -u "$user" git pull --force origin master >/dev/null 2>&1 && cd - >/dev/null 2>&1
+    sudo -u "$user" git init /home/"$user"/ >/dev/null 2>&1 && cd /home/"$user"/ && sudo -u "$user" git remote add origin "$dotfiles_repo" >/dev/null 2>&1 && sudo -u "$user" git pull --force origin master >/dev/null 2>&1
 }
 
 install_oh_my_zsh() {
@@ -76,14 +76,17 @@ install_oh_my_zsh() {
     # Source the dotfiles
     source_dotfiles
 
-    [ -d $ZSH ] && rm -r $ZSH
+    [ -d "$ZSH" ] && rm -r "$ZSH"
     sudo -u "$user" ZSH="$ZSH" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended >/dev/null 2>&1
     [ -f /home/"$user"/.zshrc ] && rm /home/"$user"/.zshrc*
 }
 
 set_backlight_rules() {
     echo "Setting backlight rules"
-    printf "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"\nRUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
+    #printf "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"\nRUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
+    echo "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
+    printf "\n" >> /etc/udev/rules.d/backlight.rules
+    echo "RUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" >> /etc/udev/rules.d/backlight.rules
 }
 
 add_tap_to_click() {
@@ -100,7 +103,7 @@ EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
 add_newperms() {
     echo "Adding new permissions"
     printf "\n" >> /etc/sudoers
-    echo "%wheel ALL=(ALL) NOPASSWD:/usr/bin/shutdown,/usr/bin/shutdown -h now,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/pacman -S,/usr/bin/pacman -Syu,/usr/bin/systemctl restart NetworkManager" >> /etc/sudoers
+    echo "%wheel ALL=(ALL) NOPASSWD:/usr/bin/shutdown,/usr/bin/shutdown -h now,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/pacman -S,/usr/bin/pacman -Syu,/usr/bin/systemctl restart NetworkManager,/usr/bin/cpupower" >> /etc/sudoers
 }
 
 final_touch() {
@@ -119,14 +122,22 @@ final_touch() {
     source_dotfiles
 
     # Creates some files and directories
-    [ ! -f $HISTFILE ] && sudo -u "$user" mkdir "$XDG_DATA_HOME/shell" >/dev/null 2>&1 ; sudo -u "$user" touch $HISTFILE
-    [ ! -d "/home/$user/Downloads" ] && sudo -u "$user" mkdir "/home/$user/Downloads"
+    [ ! -f "$HISTFILE" ] && sudo -u "$user" mkdir "$XDG_DATA_HOME/shell" >/dev/null 2>&1 ; sudo -u "$user" touch "$HISTFILE"
+    #[ ! -d "/home/$user/Downloads" ] && sudo -u "$user" mkdir "/home/$user/Downloads"
+    [ ! -d "$XDG_CACHE_HOME" ] && sudo -u "$user" mkdir -p "$XDG_CACHE_HOME"
+    [ ! -d "$XDG_CACHE_HOME/neomutt" ] && { sudo -u "$user" mkdir -p "$XDG_CACHE_HOME/neomutt/headers" ; sudo -u "$user" mkdir -p "$XDG_CACHE_HOME/neomutt/messages" ;}
 
-    [ ! -d "$XDG_CACHE_HOME" ] && sudo -u "$user" mkdir "$XDG_CACHE_HOME"
-
-    #Sets default apps
+    # Sets default apps
     sudo -u "$user" xdg-mime default org.pwmt.zathura.desktop application/pdf
 
+    # Enable some services
+    ufw enable
+    systemctl enable ufw
+
+    # Config
+    ufw default deny
+    ufw allow Transmission
+    ufw logging off
 }
 
 # Install pacman packages
