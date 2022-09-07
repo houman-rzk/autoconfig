@@ -6,7 +6,7 @@ sudo_grp="wheel"
 
 yay_pkgs="lf libxft-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo 7-zip"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpeg ffprobe ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice xarchiver unclutter wget fzf jq wget youtube-dl otf-ipafont noto-fonts noto-fonts-cjk urlscan ufw neomutt calibre w3m texlive-core zenity ntfs-3g yt-dlp tor torbrowser-launcher"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake gcc clang python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpeg ffprobe ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts noto-fonts-cjk urlscan ufw neomutt calibre w3m texlive-core zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat htop feh cpupower"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 
@@ -126,6 +126,7 @@ final_touch() {
     #[ ! -d "/home/$user/Downloads" ] && sudo -u "$user" mkdir "/home/$user/Downloads"
     [ ! -d "$XDG_CACHE_HOME" ] && sudo -u "$user" mkdir -p "$XDG_CACHE_HOME"
     [ ! -d "$XDG_CACHE_HOME/neomutt" ] && { sudo -u "$user" mkdir -p "$XDG_CACHE_HOME/neomutt/headers" ; sudo -u "$user" mkdir -p "$XDG_CACHE_HOME/neomutt/messages" ;}
+    [ ! -d "$XDG_DATA_HOME/mpd/playlists" ] && sudo -u "$user" mkdir -p "$XDG_DATA_HOME/mpd/playlists"
 
     # Sets default apps
     sudo -u "$user" xdg-mime default org.pwmt.zathura.desktop application/pdf
@@ -141,19 +142,19 @@ final_touch() {
 }
 
 # Install pacman packages
-#install_pacman_pkgs
+install_pacman_pkgs
 
 # Install yay
-#install_yay
+install_yay
 
 # Install AUR packages
-#install_aur_pkgs
+install_aur_pkgs
 
 # Install the dotfiles
-#install_dotfiles
+install_dotfiles
 
 # Fetch and install other software
-#build_repos
+build_repos
 
 # Install oh-my-zsh
 install_oh_my_zsh
@@ -162,10 +163,10 @@ install_oh_my_zsh
 set_backlight_rules
 
 # Removes need for password for some commands
-#add_newperms
+add_newperms
 
 # Adds tap-to-click
-#add_tap_to_click
+add_tap_to_click
 
 # Running the last commands
 final_touch
@@ -173,4 +174,4 @@ final_touch
 echo DONE
 
 # Logout
-#kill -9 -1
+kill -9 -1
