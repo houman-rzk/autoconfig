@@ -1,12 +1,12 @@
 #!/bin/sh
 
-user="ache"
+user="hache"
 
 sudo_grp="wheel"
 
 yay_pkgs="lf libxft-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo 7-zip"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake gcc clang python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpeg ffprobe ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts noto-fonts-cjk urlscan ufw neomutt calibre w3m texlive-core zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat htop feh cpupower"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk xwallpaper udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake gcc clang python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpeg ffprobe ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts noto-fonts-cjk urlscan ufw neomutt calibre w3m texlive-core zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat htop feh cpupower rsync stalonetray network-manager-applet networkmanager-openvpn"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 
