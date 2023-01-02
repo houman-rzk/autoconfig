@@ -4,9 +4,13 @@ user="hache"
 
 sudo_grp="wheel"
 
-yay_pkgs="lf libxft-bgra nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo 7-zip nsxiv vimv-git"
+yay_pkgs="lf nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo 7-zip nsxiv vimv-git"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu xcompmgr shellcheck zsh dash bc transmission-gtk udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake gcc clang python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpeg ffprobe ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts noto-fonts-cjk urlscan ufw neomutt calibre w3m texlive-core zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat htop gtop feh cpupower rsync stalonetray network-manager-applet networkmanager-openvpn xdg-user-dirs xournalpp sqlite dos2unix python-pip tmux python-pywal"
+npm_pkgs="peerflix castnow"
+
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu picom shellcheck zsh dash bc transmission-gtk udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake gcc clang python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpeg ffprobe ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts noto-fonts-cjk urlscan ufw neomutt calibre w3m texlive-most biber texlive-bibtexextra zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat htop gtop feh cpupower rsync stalonetray network-manager-applet networkmanager-openvpn xdg-user-dirs xournalpp sqlite dos2unix python-pip tmux python-pywal pavucontrol socat torsocks"
+
+# NON FREE (PARABOLA-INCOMPATIBLE) PKGS: base-devel ffprobe wkhtmltopdf unrar calibre torbrowser-launcher firefox python-pip
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 
