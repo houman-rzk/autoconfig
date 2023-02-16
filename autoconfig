@@ -1,29 +1,25 @@
 #!/bin/sh
 
 user="hache"
-
 sudo_grp="wheel"
 
-yay_pkgs="lf nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git brillo 7-zip nsxiv vimv-git"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp xdotool openssh ffmpeg ffmpegthumbnailer imagemagick poppler unrar ffprobe zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric ufw htop xdg-user-dirs tmux zip"
 
-npm_pkgs="peerflix castnow"
+optional_pacman_pkgs="transmission-gtk mono go nodejs npm jdk-openjdk cmake gcc clang python3 python-neovim keepassxc xf86-video-nouveau xf86-video-intel mesa-utils ffprobe gnome-epub-thumbnailer perl-image-exiftool zathura-djvu libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts-cjk urlscan noto-fonts neomutt calibre w3m texlive-most biber texlive-bibtexextra zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat gtop feh cpupower rsync stalonetray network-manager-applet networkmanager-openvpn xournalpp sqlite dos2unix python-pip python-pywal pavucontrol socat torsocks geckodriver"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu picom shellcheck zsh dash bc transmission-gtk udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper mono go nodejs npm jdk-openjdk jre-openjdk cmake gcc clang python3 slock python-neovim alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp keepassxc xdotool openssh xf86-video-nouveau xf86-video-intel mesa-utils ffmpeg ffprobe ffmpegthumbnailer imagemagick poppler wkhtmltopdf unrar gnome-epub-thumbnailer perl-image-exiftool zathura zathura-pdf-mupdf zathura-djvu ueberzug unzip docx2txt odt2txt catdoc gnumeric libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts noto-fonts-cjk urlscan ufw neomutt calibre w3m texlive-most biber texlive-bibtexextra zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat htop gtop feh cpupower rsync stalonetray network-manager-applet networkmanager-openvpn xdg-user-dirs xournalpp sqlite dos2unix python-pip tmux python-pywal pavucontrol socat torsocks zip geckodriver"
-
-# NON FREE (PARABOLA-INCOMPATIBLE) PKGS: base-devel ffprobe wkhtmltopdf unrar calibre torbrowser-launcher firefox python-pip
+aur_pkgs="lf nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git 7-zip nsxiv"
+optional_aur_pkgs="brillo vimv-git wkhtmltopdf"
+optional_npm_pkgs="peerflix castnow"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
-
 repos="dwm st dmenu dwmblocks"
-repos="dwm.xrdb st.xrdb dmenu.xrdb dwmblocks"
-
 default_branch="master"
+
 
 install_yay() {
     [ -d /tmp/yay ] && rm -r /tmp/yay
     echo "Installing yay"
     { sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay >/dev/null 2>&1 && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si >/dev/null 2>&1 ;} || echo "Failed to install yay"
-    #sudo -u "$user" git clone https://aur.archlinux.org/yay.git /tmp/yay && cd /tmp/yay && sudo -u "$user" makepkg --noconfirm -si
 }
 
 install_pacman_pkgs() {
@@ -88,7 +84,6 @@ install_oh_my_zsh() {
 
 set_backlight_rules() {
     echo "Setting backlight rules"
-    #printf "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"\nRUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
     echo "RUN+=\"/bin/chgrp $sudo_grp /sys/class/backlight/intel_backlight/brightness\"" > /etc/udev/rules.d/backlight.rules
     printf "\n" >> /etc/udev/rules.d/backlight.rules
     echo "RUN+=\"/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"" >> /etc/udev/rules.d/backlight.rules
@@ -120,8 +115,8 @@ final_touch() {
     [ -f /home/"$user"/.gitconfig ] && rm /home/"$user"/.gitconfig
 
     # npm cleanup
-    npm config set cache "$XDG_CACHE_HOME/npm" --global
-    [ -d "/home/$user/.npm" ] && rm -r "/home/$user/.npm"
+    npm config set cache "$XDG_CACHE_HOME/npm" --global >/dev/null 2>&1
+    [ -d "/home/$user/.npm" ] && rm -r "/home/$user/.npm" >/dev/null 2>&1
 
     # Source dotfiles
     source_dotfiles
@@ -145,6 +140,7 @@ final_touch() {
     ufw allow Transmission
     ufw logging off
 }
+
 
 # Install pacman packages
 install_pacman_pkgs
@@ -175,8 +171,6 @@ add_tap_to_click
 
 # Running the last commands
 final_touch
-
-echo DONE
 
 # Logout
 kill -9 -1
