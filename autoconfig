@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# TODO:
+#   Separate non free packages.
+#   Group packages and commands by relation (latex, lf, npm has some commands...) and make these optionally installed
+#   Make the script interactive, asking for user to create
+#   Do not delete home dir if user exists
+#   Some commands only make no sense if not on a laptop
+
 user="hache"
 sudo_grp="wheel"
 
@@ -137,8 +144,12 @@ final_touch() {
 
     # Config
     ufw default deny
-    ufw allow Transmission
+    #ufw allow Transmission
     ufw logging off
+
+    # Disable power button action
+    printf "HandlePowerKey=ignore\n" >> /etc/systemd/logind.conf
+    systemctl kill -s HUP systemd.logind
 }
 
 
