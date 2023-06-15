@@ -10,11 +10,11 @@
 user="hache"
 sudo_grp="wheel"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp xdotool openssh ffmpeg ffmpegthumbnailer imagemagick poppler unrar ffprobe zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric ufw htop xdg-user-dirs tmux zip"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp xdotool openssh ffmpeg ffmpegthumbnailer imagemagick poppler unrar ffprobe zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric ufw htop xdg-user-dirs tmux zip ttf-bitstream-vera-mono-nerd"
 
-optional_pacman_pkgs="transmission-gtk mono go nodejs npm jdk-openjdk cmake gcc clang python3 python-neovim keepassxc xf86-video-nouveau xf86-video-intel mesa-utils ffprobe gnome-epub-thumbnailer perl-image-exiftool zathura-djvu libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts-cjk urlscan noto-fonts neomutt calibre w3m texlive-most biber texlive-bibtexextra zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat gtop feh cpupower rsync stalonetray network-manager-applet networkmanager-openvpn xournalpp sqlite dos2unix python-pip python-pywal pavucontrol socat torsocks geckodriver"
+optional_pacman_pkgs="transmission-gtk mono go nodejs npm jdk-openjdk cmake gcc clang python3 python-neovim keepassxc xf86-video-nouveau xf86-video-intel mesa-utils ffprobe gnome-epub-thumbnailer perl-image-exiftool zathura-djvu libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts-cjk urlscan noto-fonts neomutt calibre w3m texlive-most biber texlive-bibtexextra zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat gtop feh cpupower rsync stalonetray network-manager-applet networkmanager-openvpn xournalpp sqlite dos2unix python-pip python-pywal pavucontrol socat torsocks geckodriver p7zip"
 
-aur_pkgs="lf nerd-fonts-bitstream-vera-mono gtk-theme-arc-gruvbox-git 7-zip nsxiv"
+aur_pkgs="lf gtk-theme-arc-gruvbox-git nsxiv"
 optional_aur_pkgs="brillo vimv-git wkhtmltopdf"
 optional_npm_pkgs="peerflix castnow"
 
@@ -40,12 +40,22 @@ install_pacman_pkgs() {
         echo "Installing '$p'"
 	    pacman -S --noconfirm "$p" >/dev/null 2>&1
     done
+
+    for p in $optional_pacman_pkgs ; do
+        echo "Installing '$p'"
+	    pacman -S --noconfirm "$p" >/dev/null 2>&1
+    done
 }
 
 install_aur_pkgs() {
     yay -Syu --noconfirm
 
-    for p in $yay_pkgs ; do
+    for p in $aur_pkgs ; do
+        echo "Installing '$p' (AUR)"
+	    sudo -u "$user" yay -S --noconfirm "$p" >/dev/null 2>&1
+    done
+
+    for p in $optional_aur_pkgs ; do
         echo "Installing '$p' (AUR)"
 	    sudo -u "$user" yay -S --noconfirm "$p" >/dev/null 2>&1
     done
