@@ -1,5 +1,7 @@
 # autoconfig
 
+# WARNING: This package is currently under maintenance. Run at your own peril.
+
 A script for automating the installation and configuration of my powerful daily driver system based on Arch Linux.
 
 Originally inspired by [LARBS](https://larbs.xyz), it provides a much deeper configuration of many programs, practically evolving into a just-works distro.
