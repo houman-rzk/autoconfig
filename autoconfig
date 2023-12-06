@@ -5,10 +5,7 @@
 #   Do not delete home dir if user exists
 #   Pipewire
 
-user="hache"
-sudo_grp="wheel"
-
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig neovim dunst xclip task taskwarrior-tui libnotify imv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa-utils pipewire wireplumber pulsemixer mpv mpd mpc ncmpcpp ffmpeg ffmpegthumbnailer imagemagick poppler unrar ffprobe zathura zathura-pdf-mupdf zathura-djvu unzip docx2txt odt2txt catdoc gnumeric htop xdg-user-dirs tmux zip ttf-jetbrains-mono-nerd lf jq p7zip perl-image-exiftool socat xournalpp neomutt tor torbrowser-launcher urlscan gtop w3m python-pywal transmission-gtk pass firefox cpupower gnome-epub-thumbnailer hyprland waybar swaybg waylock nautilus grim foot wl-clipboard"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig neovim dunst xclip task taskwarrior-tui libnotify imv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa-utils pipewire wireplumber pulsemixer mpv mpd mpc ncmpcpp ffmpeg ffmpegthumbnailer imagemagick poppler unrar zathura zathura-pdf-mupdf zathura-djvu unzip docx2txt odt2txt catdoc gnumeric htop xdg-user-dirs tmux zip ttf-jetbrains-mono-nerd lf jq p7zip perl-image-exiftool socat xournalpp neomutt tor torbrowser-launcher urlscan gtop w3m python-pywal transmission-gtk pass firefox cpupower gnome-epub-thumbnailer hyprland waybar swaybg waylock nautilus grim foot wl-clipboard"
 
 #optional_pacman_pkgs="mono go nodejs npm jdk-openjdk cmake gcc clang python3 python-neovim keepassxc xf86-video-nouveau xf86-video-intel mesa-utils ffprobe libreoffice xarchiver unclutter fzf wget calibre texlive-most biber texlive-bibtexextra zenity ntfs-3g redshift newsboat sqlite dos2unix python-pip pavucontrol yt-dlp"
 
@@ -18,6 +15,14 @@ dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 repos="dwm st dmenu dwmblocks"
 default_branch="master"
 
+manage_user() {
+    printf "Enter user name: "
+    read -r user
+
+    id "$user" || useradd -m "$user"
+
+    usermod -aG wheel "$user"
+}
 
 install_yay() {
     [ -d /tmp/yay ] && rm -r /tmp/yay
@@ -146,6 +151,8 @@ final_touch() {
     systemctl kill -s HUP systemd.logind
 }
 
+# Set user
+manage_user
 
 # Install pacman packages
 install_pacman_pkgs
