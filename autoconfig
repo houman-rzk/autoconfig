@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # TODO:
-#   Make the script interactive, asking for user to create
 #   Do not delete home dir if user exists
 
 sudo_grp="wheel"
@@ -10,7 +9,7 @@ pacman_pkgs="xorg xorg-xinit libx11 libxinerama libxft fontconfig neovim dunst x
 
 #optional_pacman_pkgs="mono go nodejs npm jdk-openjdk cmake gcc clang python3 python-neovim keepassxc xf86-video-nouveau xf86-video-intel mesa-utils ffprobe libreoffice xarchiver unclutter fzf wget calibre texlive-most biber texlive-bibtexextra zenity ntfs-3g redshift newsboat sqlite dos2unix python-pip pavucontrol yt-dlp"
 
-aur_pkgs="gtk-theme-arc-gruvbox-git brillo ueberzugpp wkhtmltopdf wl-clip-persist rofi-lbonn-wayland"
+aur_pkgs="gtk-theme-arc-gruvbox-git brillo ueberzugpp wl-clip-persist rofi-lbonn-wayland"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 repos="dwm st dmenu dwmblocks"
@@ -19,6 +18,8 @@ default_branch="master"
 manage_user() {
     printf "Enter user name: "
     read -r user
+
+    # User might exist but not have sudo permissions
 
     if id "$user" >/dev/null 2>&1
     then
@@ -36,6 +37,12 @@ manage_user() {
 }
 
 install_yay() {
+    echo "Refreshing pacman keys"
+    rm -rf /etc/pacman.d/gnupg
+    pacman-key --init >/dev/null 2>&1
+    pacman-key --populate >/dev/null 2>&1
+    pacman -S --noconfirm archlinux-keyring >/dev/null 2>&1
+
     echo "Installing yay"
     pacman -S --noconfirm base-devel go >/dev/null 2>&1
     [ -d /tmp/yay ] && rm -r /tmp/yay
@@ -43,12 +50,6 @@ install_yay() {
 }
 
 install_pacman_pkgs() {
-    echo "Refreshing pacman keys"
-    rm -rf /etc/pacman.d/gnupg
-    pacman-key --init >/dev/null 2>&1
-    pacman-key --populate >/dev/null 2>&1
-    pacman -S --noconfirm archlinux-keyring >/dev/null 2>&1
-
     for p in $pacman_pkgs ; do
         #echo "Installing '$p'"
 	      #pacman -S --noconfirm "$p" >/dev/null 2>&1
@@ -58,7 +59,7 @@ install_pacman_pkgs() {
 
 install_aur_pkgs() {
     echo "Installing AUR packages"
-	  sudo -u "$user" yay -S --noconfirm "$aur_pkgs" >/dev/null 2>&1
+	  sudo -u "$user" yay -S --noconfirm $aur_pkgs >/dev/null 2>&1
 }
 
 build_repos() {
