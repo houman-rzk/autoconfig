@@ -57,11 +57,8 @@ install_pacman_pkgs() {
 }
 
 install_aur_pkgs() {
-    for p in $aur_pkgs ; do
-        #echo "Installing '$p' (AUR)"
-	      #sudo -u "$user" yay -S --noconfirm "$p" >/dev/null 2>&1
-	      sudo -u "$user" yay -S --noconfirm "$p" 1>/dev/null
-    done
+    echo "Installing AUR packages"
+	  sudo -u "$user" yay -S --noconfirm "$aur_pkgs" >/dev/null 2>&1
 }
 
 build_repos() {
