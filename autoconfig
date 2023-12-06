@@ -3,15 +3,16 @@
 # TODO:
 #   Make the script interactive, asking for user to create
 #   Do not delete home dir if user exists
+#   Pipewire
 
 user="hache"
 sudo_grp="wheel"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig neovim dunst xclip task taskwarrior-tui libnotify imv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa alsa-utils pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp ffmpeg ffmpegthumbnailer imagemagick poppler unrar ffprobe zathura zathura-pdf-mupdf zathura-djvu unzip docx2txt odt2txt catdoc gnumeric htop xdg-user-dirs tmux zip ttf-jetbrains-mono-nerd lf jq p7zip perl-image-exiftool socat xournalpp neomutt tor torbrowser-launcher urlscan gtop w3m python-pywal transmission-gtk pass firefox cpupower gnome-epub-thumbnailer hyprland waybar swaybg waylock nautilus grim foot wl-clipboarb"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig neovim dunst xclip task taskwarrior-tui libnotify imv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa-utils pipewire wireplumber pulsemixer mpv mpd mpc ncmpcpp ffmpeg ffmpegthumbnailer imagemagick poppler unrar ffprobe zathura zathura-pdf-mupdf zathura-djvu unzip docx2txt odt2txt catdoc gnumeric htop xdg-user-dirs tmux zip ttf-jetbrains-mono-nerd lf jq p7zip perl-image-exiftool socat xournalpp neomutt tor torbrowser-launcher urlscan gtop w3m python-pywal transmission-gtk pass firefox cpupower gnome-epub-thumbnailer hyprland waybar swaybg waylock nautilus grim foot wl-clipboard"
 
 #optional_pacman_pkgs="mono go nodejs npm jdk-openjdk cmake gcc clang python3 python-neovim keepassxc xf86-video-nouveau xf86-video-intel mesa-utils ffprobe libreoffice xarchiver unclutter fzf wget calibre texlive-most biber texlive-bibtexextra zenity ntfs-3g redshift newsboat sqlite dos2unix python-pip pavucontrol yt-dlp"
 
-aur_pkgs="gtk-theme-arc-gruvbox-git brillo ueberzugpp wkhtmltopdf wl-clip-persist"
+aur_pkgs="gtk-theme-arc-gruvbox-git brillo ueberzugpp wkhtmltopdf wl-clip-persist rofi-lbonn-wayland"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 repos="dwm st dmenu dwmblocks"
@@ -30,15 +31,17 @@ install_pacman_pkgs() {
     pacman-key --populate
 
     for p in $pacman_pkgs ; do
-        echo "Installing '$p'"
-	    pacman -S --noconfirm "$p" >/dev/null 2>&1
+        #echo "Installing '$p'"
+	      #pacman -S --noconfirm "$p" >/dev/null 2>&1
+	      pacman -S --noconfirm "$p" 1>/dev/null
     done
 }
 
 install_aur_pkgs() {
     for p in $aur_pkgs ; do
-        echo "Installing '$p' (AUR)"
-	    sudo -u "$user" yay -S --noconfirm "$p" >/dev/null 2>&1
+        #echo "Installing '$p' (AUR)"
+	      #sudo -u "$user" yay -S --noconfirm "$p" >/dev/null 2>&1
+	      sudo -u "$user" yay -S --noconfirm "$p" 1>/dev/null
     done
 }
 
