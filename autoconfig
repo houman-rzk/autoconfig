@@ -21,13 +21,13 @@ manage_user() {
     printf "Enter user name: "
     read -r user
 
-    if id "$user"
+    if id "$user" >/dev/null 2>&1
     then
         echo "User exists"
     else
-        echo "User \"$user\" does not exist. Creating..."
         useradd -m "$user"
-        echo "Enter password for \"$user\""
+        echo "Enter password the new user \"$user\""
+        passwd "$user"
     fi
 
     usermod -aG wheel "$user"
@@ -44,7 +44,7 @@ install_pacman_pkgs() {
     rm -rf /etc/pacman.d/gnupg
     pacman-key --init >/dev/null 2>&1
     pacman-key --populate >/dev/null 2>&1
-    pacman -S archlinux-keyring >/dev/null 2>&1
+    pacman -S --noconfirm archlinux-keyring >/dev/null 2>&1
 
     for p in $pacman_pkgs ; do
         #echo "Installing '$p'"
