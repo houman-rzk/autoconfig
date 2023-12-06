@@ -1,22 +1,17 @@
 #!/bin/sh
 
 # TODO:
-#   Separate non free packages.
-#   Group packages and commands by relation (latex, lf, npm has some commands...) and make these optionally installed
 #   Make the script interactive, asking for user to create
 #   Do not delete home dir if user exists
-#   Some commands only make no sense if not on a laptop
 
 user="hache"
 sudo_grp="wheel"
 
-pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig freetype2 gnu-free-fonts neovim dunst xclip alsa-utils task taskwarrior-tui libnotify noto-fonts-emoji sxiv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp xdotool openssh ffmpeg ffmpegthumbnailer imagemagick poppler unrar ffprobe zathura zathura-pdf-mupdf ueberzug unzip docx2txt odt2txt catdoc gnumeric ufw htop xdg-user-dirs tmux zip ttf-bitstream-vera-mono-nerd"
+pacman_pkgs="xorg xorg-xinit base-devel libx11 libxinerama libxft fontconfig neovim dunst xclip task taskwarrior-tui libnotify imv clipmenu picom shellcheck zsh dash bc udisks2 zsh-syntax-highlighting zsh-autosuggestions xwallpaper slock alsa alsa-utils pulseaudio pulseaudio-alsa pulsemixer mpv mpd mpc ncmpcpp ffmpeg ffmpegthumbnailer imagemagick poppler unrar ffprobe zathura zathura-pdf-mupdf zathura-djvu unzip docx2txt odt2txt catdoc gnumeric htop xdg-user-dirs tmux zip ttf-jetbrains-mono-nerd lf jq p7zip perl-image-exiftool socat xournalpp neomutt tor torbrowser-launcher urlscan gtop w3m python-pywal transmission-gtk pass firefox cpupower gnome-epub-thumbnailer hyprland waybar swaybg waylock nautilus grim foot wl-clipboarb"
 
-optional_pacman_pkgs="transmission-gtk mono go nodejs npm jdk-openjdk cmake gcc clang python3 python-neovim keepassxc xf86-video-nouveau xf86-video-intel mesa-utils ffprobe gnome-epub-thumbnailer perl-image-exiftool zathura-djvu libreoffice xarchiver unclutter wget fzf jq wget otf-ipafont noto-fonts-cjk urlscan noto-fonts neomutt calibre w3m texlive-most biber texlive-bibtexextra zenity ntfs-3g yt-dlp tor torbrowser-launcher firefox redshift newsboat gtop feh cpupower rsync stalonetray network-manager-applet networkmanager-openvpn xournalpp sqlite dos2unix python-pip python-pywal pavucontrol socat torsocks geckodriver p7zip"
+#optional_pacman_pkgs="mono go nodejs npm jdk-openjdk cmake gcc clang python3 python-neovim keepassxc xf86-video-nouveau xf86-video-intel mesa-utils ffprobe libreoffice xarchiver unclutter fzf wget calibre texlive-most biber texlive-bibtexextra zenity ntfs-3g redshift newsboat sqlite dos2unix python-pip pavucontrol yt-dlp"
 
-aur_pkgs="lf gtk-theme-arc-gruvbox-git nsxiv"
-optional_aur_pkgs="brillo vimv-git wkhtmltopdf"
-optional_npm_pkgs="peerflix castnow"
+aur_pkgs="gtk-theme-arc-gruvbox-git brillo ueberzugpp wkhtmltopdf wl-clip-persist"
 
 dotfiles_repo="https://github.com/houman-rzk/dotfiles"
 repos="dwm st dmenu dwmblocks"
@@ -34,28 +29,14 @@ install_pacman_pkgs() {
     pacman-key --init
     pacman-key --populate
 
-    pacman -Syu --noconfirm
-
     for p in $pacman_pkgs ; do
-        echo "Installing '$p'"
-	    pacman -S --noconfirm "$p" >/dev/null 2>&1
-    done
-
-    for p in $optional_pacman_pkgs ; do
         echo "Installing '$p'"
 	    pacman -S --noconfirm "$p" >/dev/null 2>&1
     done
 }
 
 install_aur_pkgs() {
-    yay -Syu --noconfirm
-
     for p in $aur_pkgs ; do
-        echo "Installing '$p' (AUR)"
-	    sudo -u "$user" yay -S --noconfirm "$p" >/dev/null 2>&1
-    done
-
-    for p in $optional_aur_pkgs ; do
         echo "Installing '$p' (AUR)"
 	    sudo -u "$user" yay -S --noconfirm "$p" >/dev/null 2>&1
     done
@@ -146,16 +127,16 @@ final_touch() {
     [ ! -d "$XDG_DATA_HOME/mpd/playlists" ] && sudo -u "$user" mkdir -p "$XDG_DATA_HOME/mpd/playlists"
 
     # Sets default apps
-    sudo -u "$user" xdg-mime default org.pwmt.zathura.desktop application/pdf
+    #sudo -u "$user" xdg-mime default org.pwmt.zathura.desktop application/pdf
 
     # Enable some services
-    ufw enable
-    systemctl enable ufw
+    #ufw enable
+    #systemctl enable ufw
 
-    # Config
-    ufw default deny
-    #ufw allow Transmission
-    ufw logging off
+    ## Config
+    #ufw default deny
+    ##ufw allow Transmission
+    #ufw logging off
 
     # Disable power button action
     printf "HandlePowerKey=ignore\n" >> /etc/systemd/logind.conf
